@@ -6,7 +6,6 @@ fetch("/api/transaction")
     return response.json();
   })
   .then(data => {
-    // save db data on global variable
     transactions = data;
 
     populateTotal();
@@ -15,7 +14,6 @@ fetch("/api/transaction")
   });
 
 function populateTotal() {
-  // reduce transaction amounts to a single total value
   let total = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
   }, 0);
@@ -29,7 +27,6 @@ function populateTable() {
   tbody.innerHTML = "";
 
   transactions.forEach(transaction => {
-    // create and populate a table row
     let tr = document.createElement("tr");
     tr.innerHTML = `
       <td>${transaction.name}</td>
@@ -41,23 +38,18 @@ function populateTable() {
 }
 
 function populateChart() {
-  // copy array and reverse it
   let reversed = transactions.slice().reverse();
   let sum = 0;
-
-  // create date labels for chart
   let labels = reversed.map(t => {
     let date = new Date(t.date);
     return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
   });
 
-  // create incremental values for chart
   let data = reversed.map(t => {
     sum += parseInt(t.value);
     return sum;
   });
 
-  // remove old chart if it exists
   if (myChart) {
     myChart.destroy();
   }
@@ -83,7 +75,6 @@ function sendTransaction(isAdding) {
   let amountEl = document.querySelector("#t-amount");
   let errorEl = document.querySelector(".form .error");
 
-  // validate form
   if (nameEl.value === "" || amountEl.value === "") {
     errorEl.textContent = "Missing Information";
     return;
@@ -92,7 +83,6 @@ function sendTransaction(isAdding) {
     errorEl.textContent = "";
   }
 
-  // create record
   let transaction = {
     name: nameEl.value,
     value: amountEl.value,
